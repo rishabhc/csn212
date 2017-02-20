@@ -2,9 +2,9 @@
 using namespace std;
 
 struct node{
-	node* left, right;
+	node *left, *right;
 	int high,low,max;
-}
+};
 
 node* newNode(int l, int h){
 	node* temp = new node;
@@ -19,7 +19,7 @@ node* insert(node* root, int l, int h){
 	if(root == NULL)
 		return newNode(l,h);
 	
-	if(l < root->l)
+	if(l < root->low)
 		root->left = insert(root->left,l,h);
 
 	else 
@@ -47,9 +47,26 @@ node* search(node* root, int l, int h){
 	if(root->left != NULL && root->left->max >= l)
 		return search(root->left,l,h);
 
-	return(root->right,l,h);
+	return search(root->right,l,h);
 }
 
 int main(){
-	
+	int intervals[][6] = {{15, 20}, {10, 30}, {17, 19},
+        {5, 20}, {12, 15}, {30, 40}
+    };
+
+    int n = 6;
+    node *root = NULL;
+    for (int i = 0; i < n; i++)
+        root = insert(root, intervals[i][0],intervals[i][1]);
+
+    int checks[][2] = {{14,16},{21,23}};
+    for(int i = 0; i < 2; i++){
+	    node* ans = search(root,checks[i][0],checks[i][1]);
+	    if (ans == NULL)
+	        cout << "\nNo Overlapping Interval";
+	    else
+	        cout << "["<<checks[i][0] << ", " << checks[i][1] <<  "] overlaps with [" << ans->low << ", " << ans->high << "]" << endl;
+	}
+
 }
